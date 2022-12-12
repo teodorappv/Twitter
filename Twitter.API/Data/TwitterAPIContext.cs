@@ -10,6 +10,6 @@ namespace Twitter.API.Data
         {
         }
 
-        public DbSet<Category> Category { get; set; } = default!;
+        public DbSet<Category> Categories { get; set; } = default!;
     }
 }

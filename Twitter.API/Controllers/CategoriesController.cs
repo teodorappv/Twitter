@@ -5,7 +5,7 @@ using Twitter.Core.Entities;
 
 namespace Twitter.API.Controllers
 {
-    
+
     public class CategoriesController : Controller
     {
         private readonly TwitterAPIContext _context;
@@ -19,19 +19,19 @@ namespace Twitter.API.Controllers
         [HttpGet("Categories")]
         public async Task<IActionResult> Index()
         {
-              return Ok(await _context.Category.ToListAsync());
+              return Ok(await _context.Categories.ToListAsync());
         }
 
         // GET: Categories/Details/5
         [HttpGet("Categories/Details/{id}")]
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Category == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Category
+            var category = await _context.Categories
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {
@@ -50,15 +50,17 @@ namespace Twitter.API.Controllers
         // POST: Categories/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost("Categories/Create/{id}")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Category category)
+        [HttpPost("Categories/Create")]
+        public async Task<IActionResult> Create(string Name, [Bind("Id,Name")] Category category)
         {
-            if (ModelState.IsValid)
+            if (NameExists(Name))
             {
+                return BadRequest("Category with the same name already exists!");
+            }
+
+            if (ModelState.IsValid) { 
                 _context.Add(category);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
             }
             return Ok(category);
         }
@@ -66,12 +68,12 @@ namespace Twitter.API.Controllers
         // GET: Categories/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Category == null)
+            if (id == null || _context.Categories == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Category.FindAsync(id);
+            var category = await _context.Categories.FindAsync(id);
             if (category == null)
             {
                 return NotFound();
@@ -83,7 +85,6 @@ namespace Twitter.API.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Categories/Edit/{id}")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Category category)
         {
             if (id != category.Id)
@@ -109,7 +110,6 @@ namespace Twitter.API.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             return Ok(category);
         }
@@ -117,12 +117,12 @@ namespace Twitter.API.Controllers
         // GET: Categories/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Category == null)
+            if (id == null || _context.Categories == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Category
+            var category = await _context.Categories
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {
@@ -133,27 +133,48 @@ namespace Twitter.API.Controllers
         }
 
         // POST: Categories/Delete/5
-        [HttpPost("Categories/Delete/{id}"), ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [HttpPost("Categories/DeleteById/{id}"), ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Category == null)
+            if (_context.Categories == null)
             {
-                return Problem("Entity set 'TwitterAPIContext.Category'  is null.");
+                return BadRequest("Entity set 'TwitterAPIContext.Category'  is null.");
             }
-            var category = await _context.Category.FindAsync(id);
+            var category = await _context.Categories.FindAsync(id);
             if (category != null)
             {
-                _context.Category.Remove(category);
+                _context.Categories.Remove(category);
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Ok(category);
+        }
+
+        [HttpPost("Categories/DeleteByName/{Name}")]
+        public async Task<IActionResult> DeleteByName(string Name)
+        {
+            if (_context.Categories == null)
+            {
+                return BadRequest("Entity set 'TwitterAPIContext.Category'  is null.");
+            }
+            var category = await _context.Categories.FirstOrDefaultAsync(m => m.Name == Name);
+            if (category != null)
+            {
+                _context.Categories.Remove(category);
+            }
+
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
 
         private bool CategoryExists(int id)
         {
-          return _context.Category.Any(e => e.Id == id);
+          return _context.Categories.Any(e => e.Id == id);
+        }
+
+        private bool NameExists(string Name)
+        {
+            return _context.Categories.Any(e => e.Name == Name);
         }
     }
 }

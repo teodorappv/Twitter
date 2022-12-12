@@ -11,11 +11,11 @@ namespace Twitter.API.Data
                 serviceProvider.GetRequiredService<
                     DbContextOptions<TwitterAPIContext>>()))
             {
-                if (context.Category.Any())
+                if (context.Categories.Any())
                 {
-                    return;   
+                    return;
                 }
-                context.Category.AddRange(
+                context.Categories.AddRange(
                     new Category
                     {
                         Name = "Life"
