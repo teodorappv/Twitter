@@ -19,7 +19,7 @@ namespace Twitter.API.Controllers
         [HttpGet("Categories")]
         public async Task<IActionResult> Index()
         {
-              return Ok(await _context.Categories.ToListAsync());
+            return Ok(await _context.Categories.ToListAsync());
         }
 
         // GET: Categories/Details/5
@@ -57,11 +57,8 @@ namespace Twitter.API.Controllers
             {
                 return BadRequest("Category with the same name already exists!");
             }
-
-            if (ModelState.IsValid) { 
-                _context.Add(category);
-                await _context.SaveChangesAsync();
-            }
+            _context.Add(category);
+            await _context.SaveChangesAsync();
             return Ok(category);
         }
 
@@ -145,7 +142,7 @@ namespace Twitter.API.Controllers
             {
                 _context.Categories.Remove(category);
             }
-            
+
             await _context.SaveChangesAsync();
             return Ok(category);
         }
@@ -169,7 +166,7 @@ namespace Twitter.API.Controllers
 
         private bool CategoryExists(int id)
         {
-          return _context.Categories.Any(e => e.Id == id);
+            return _context.Categories.Any(e => e.Id == id);
         }
 
         private bool NameExists(string Name)
