@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Twitter.API.Data;
 using Twitter.Core.Entities;
+using Twitter.Core.Interfaces;
+using Twitter.Infrastructure.Data;
 
 namespace Twitter.API.Controllers
 {
@@ -9,17 +10,21 @@ namespace Twitter.API.Controllers
     public class CategoriesController : Controller
     {
         private readonly TwitterAPIContext _context;
+        private ILoggerManager _logger;
 
-        public CategoriesController(TwitterAPIContext context)
+        public CategoriesController(TwitterAPIContext context, ILoggerManager logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: Categories
         [HttpGet("Categories")]
         public async Task<IActionResult> Index()
         {
-            return Ok(await _context.Categories.ToListAsync());
+            var categories = await _context.Categories.ToListAsync();
+            //throw new Exception("Exception while fetching all Categories");
+            return Ok(categories);
         }
 
         // GET: Categories/Details/5

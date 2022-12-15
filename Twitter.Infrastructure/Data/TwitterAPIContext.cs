@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Twitter.Core.Entities;
 
-namespace Twitter.API.Data
+namespace Twitter.Infrastructure.Data
 {
     public class TwitterAPIContext : DbContext
     {
-        public TwitterAPIContext (DbContextOptions<TwitterAPIContext> options)
+        public TwitterAPIContext(DbContextOptions<TwitterAPIContext> options)
             : base(options)
         {
         }
