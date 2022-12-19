@@ -50,14 +50,14 @@ namespace Twitter.API.Controllers
             return Ok(category);
         }
        
-        [HttpPost("Categories/DeleteById/{id}"), ActionName("Delete")]
+        [HttpDelete("Categories/{id}"), ActionName("Delete")]
         public async Task<IActionResult> DeleteById(int id)
         {
             var category = await _categoriesService.DeleteById(id);
             return Ok(category);
         }
 
-        [HttpPost("Categories/DeleteByName/{Name}")]
+        [HttpDelete("Categories/{Name}")]
         public async Task<IActionResult> DeleteByName(string Name)
         {
             var category = await _categoriesService.DeleteByName(Name);
