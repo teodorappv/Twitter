@@ -11,6 +11,7 @@ LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nl
 
 builder.Services.AddDbContext<TwitterAPIContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("TwitterAPIContext") ?? throw new InvalidOperationException("Connection string 'TwitterAPIContext' not found.")));
+builder.Services.AddScoped<ICategoriesService,CategoriesService>();
 
 builder.Services.ConfigureLoggerService();
 
