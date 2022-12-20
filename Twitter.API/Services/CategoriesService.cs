@@ -26,11 +26,6 @@ namespace Twitter.API.Services
             return await _context.Categories.FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public bool NameExists(string Name)
-        {
-            return _context.Categories.Any(c => c.Name == Name);
-        }
-
         public async Task<bool> Create(Category category)
         {
             await _context.Categories.AddAsync(category);

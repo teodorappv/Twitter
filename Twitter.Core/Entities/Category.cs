@@ -1,6 +1,8 @@
-﻿namespace Twitter.Core.Entities;
+﻿using Twitter.Core.Interfaces;
 
-public partial class Category
+namespace Twitter.Core.Entities;
+
+public partial class Category: IEntity
 {
     public int Id { get; set; }
 

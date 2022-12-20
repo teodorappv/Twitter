@@ -14,7 +14,6 @@ namespace Twitter.Core.Interfaces
         Task<List<Category>> GetCategories();
         Task<Category> GetCategoryById(int? id);
         Task<bool> Create(Category category);
-        bool NameExists(string Name);
         Task<bool> DeleteById(int id);
         Task<bool> DeleteByName(string Name);
 
