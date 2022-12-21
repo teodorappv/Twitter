@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using Twitter.API.ActionFilters;
+using Twitter.API.Exceptions;
 using Twitter.Core.Entities;
 using Twitter.Core.Interfaces;
 
@@ -24,33 +26,31 @@ namespace Twitter.API.Controllers
         }
 
         [HttpGet("Categories/{id}")]
-        public async Task<IActionResult> GetCategoryById(int? id)
+        [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetCategoryById(int id)
         {
-            var category = await _categoriesService.GetCategoryById(id);
-            return Ok(category);
+            return Ok(await _categoriesService.GetCategoryById(id));
         }
 
         [HttpPost("Categories")]
-        [ServiceFilter(typeof(ValidateEntityExistsAttribute<Category>))]
-        [ServiceFilter(typeof(ValidationFilterAttribute))]
-        public async Task<IActionResult> Create(string Name, [Bind("Id,Name")] Category category)
+        [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Create(string name)
         {
-            await _categoriesService.Create(category);
-            return Ok(category);
+            return Ok(await _categoriesService.Create(name));
         }
        
         [HttpDelete("Categories/{id}")]
+        [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> DeleteById(int id)
         {
-            var category = await _categoriesService.DeleteById(id);
-            return Ok(category);
+            return Ok(await _categoriesService.DeleteById(id));
         }
 
         [HttpDelete("Categories/DeleteByName/{Name}")]
+        [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> DeleteByName(string Name)
         {
-            var category = await _categoriesService.DeleteByName(Name);
-            return Ok(category);
+            return Ok(await _categoriesService.DeleteByName(Name));
         }
     }
 }

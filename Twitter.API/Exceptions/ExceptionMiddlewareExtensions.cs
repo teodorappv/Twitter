@@ -3,7 +3,7 @@ using System.Net;
 using Twitter.Core.Entities;
 using Twitter.Core.Interfaces;
 
-namespace Twitter.API.Execption;
+namespace Twitter.API.Exceptions;
 
 public static class ExceptionMiddlewareExtensions
 {
