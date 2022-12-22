@@ -8,7 +8,8 @@ using Twitter.Core.Interfaces;
 namespace Twitter.API.Controllers
 {
 
-    public class CategoriesController : Controller
+    [ApiController]
+    public class CategoriesController : ControllerBase
     {
         private readonly ICategoriesService _categoriesService;
         private ILoggerManager _logger;
@@ -26,7 +27,6 @@ namespace Twitter.API.Controllers
         }
 
         [HttpGet("Categories/{id}")]
-        [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetCategoryById(int id)
         {
             return Ok(await _categoriesService.GetCategoryById(id));
@@ -43,14 +43,16 @@ namespace Twitter.API.Controllers
         [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> DeleteById(int id)
         {
-            return Ok(await _categoriesService.DeleteById(id));
+            await _categoriesService.DeleteById(id);
+            return NoContent();
         }
 
         [HttpDelete("Categories/DeleteByName/{Name}")]
         [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> DeleteByName(string Name)
         {
-            return Ok(await _categoriesService.DeleteByName(Name));
+            await _categoriesService.DeleteByName(Name);
+            return NoContent();
         }
     }
 }

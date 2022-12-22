@@ -32,7 +32,7 @@ namespace Twitter.API.Services
             return await _context.Categories.FirstOrDefaultAsync(m => m.Name == name);
         }
 
-        public async Task<bool> Create(string name)
+        public async Task<Category> Create(string name)
         {
             var existingCategory = await GetCategoryByName(name);
             if(existingCategory != null)
@@ -41,8 +41,8 @@ namespace Twitter.API.Services
             }
             var newCategory = new Category() { Name = name };
             await _context.Categories.AddAsync(newCategory);
-            var created = await _context.SaveChangesAsync();
-            return created > 0;
+            await _context.SaveChangesAsync();
+            return newCategory;
         }
         
         public async Task<bool> DeleteById(int id)
