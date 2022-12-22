@@ -1,177 +1,58 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Twitter.API.Data;
+using System.Net;
+using Twitter.API.ActionFilters;
+using Twitter.API.Exceptions;
 using Twitter.Core.Entities;
+using Twitter.Core.Interfaces;
 
 namespace Twitter.API.Controllers
 {
 
-    public class CategoriesController : Controller
+    [ApiController]
+    public class CategoriesController : ControllerBase
     {
-        private readonly TwitterAPIContext _context;
+        private readonly ICategoriesService _categoriesService;
+        private ILoggerManager _logger;
 
-        public CategoriesController(TwitterAPIContext context)
+        public CategoriesController(ICategoriesService categoriesService, ILoggerManager logger)
         {
-            _context = context;
+            _categoriesService = categoriesService;
+            _logger = logger;
         }
 
-        // GET: Categories
         [HttpGet("Categories")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> GetCategories()
         {
-            return Ok(await _context.Categories.ToListAsync());
+            return Ok(await _categoriesService.GetCategories());
         }
 
-        // GET: Categories/Details/5
-        [HttpGet("Categories/Details/{id}")]
-        public async Task<IActionResult> Details(int? id)
+        [HttpGet("Categories/{id}")]
+        public async Task<IActionResult> GetCategoryById(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(category);
+            return Ok(await _categoriesService.GetCategoryById(id));
         }
 
-        // GET: Categories/Create
-        public IActionResult Create()
+        [HttpPost("Categories")]
+        [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Create(string name)
         {
-            return Ok();
+            return Ok(await _categoriesService.Create(name));
         }
-
-        // POST: Categories/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost("Categories/Create")]
-        public async Task<IActionResult> Create(string Name, [Bind("Id,Name")] Category category)
+       
+        [HttpDelete("Categories/{id}")]
+        [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> DeleteById(int id)
         {
-            if (NameExists(Name))
-            {
-                return BadRequest("Category with the same name already exists!");
-            }
-            _context.Add(category);
-            await _context.SaveChangesAsync();
-            return Ok(category);
-        }
-
-        // GET: Categories/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Categories == null)
-            {
-                return NotFound();
-            }
-
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-            return Ok(category);
-        }
-
-        // POST: Categories/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost("Categories/Edit/{id}")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Category category)
-        {
-            if (id != category.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(category);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CategoryExists(category.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-            }
-            return Ok(category);
-        }
-
-        // GET: Categories/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Categories == null)
-            {
-                return NotFound();
-            }
-
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(category);
-        }
-
-        // POST: Categories/Delete/5
-        [HttpPost("Categories/DeleteById/{id}"), ActionName("Delete")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Categories == null)
-            {
-                return BadRequest("Entity set 'TwitterAPIContext.Category'  is null.");
-            }
-            var category = await _context.Categories.FindAsync(id);
-            if (category != null)
-            {
-                _context.Categories.Remove(category);
-            }
-
-            await _context.SaveChangesAsync();
-            return Ok(category);
-        }
-
-        [HttpPost("Categories/DeleteByName/{Name}")]
-        public async Task<IActionResult> DeleteByName(string Name)
-        {
-            if (_context.Categories == null)
-            {
-                return BadRequest("Entity set 'TwitterAPIContext.Category'  is null.");
-            }
-            var category = await _context.Categories.FirstOrDefaultAsync(m => m.Name == Name);
-            if (category != null)
-            {
-                _context.Categories.Remove(category);
-            }
-
-            await _context.SaveChangesAsync();
+            await _categoriesService.DeleteById(id);
             return NoContent();
         }
 
-        private bool CategoryExists(int id)
+        [HttpDelete("Categories/DeleteByName/{Name}")]
+        [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> DeleteByName(string Name)
         {
-            return _context.Categories.Any(e => e.Id == id);
-        }
-
-        private bool NameExists(string Name)
-        {
-            return _context.Categories.Any(e => e.Name == Name);
+            await _categoriesService.DeleteByName(Name);
+            return NoContent();
         }
     }
 }

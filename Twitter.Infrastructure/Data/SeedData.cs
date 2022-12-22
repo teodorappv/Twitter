@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Twitter.Core.Entities;
 
-namespace Twitter.API.Data
+namespace Twitter.Infrastructure.Data
 {
     public static class SeedData
     {
