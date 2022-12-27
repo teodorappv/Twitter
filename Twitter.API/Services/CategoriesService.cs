@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Twitter.API.Exceptions;
 using Twitter.Core.Entities;
-using Twitter.Core.Interfaces;
+using Twitter.Core.Contracts;
 using Twitter.Infrastructure.Data;
+using Twitter.Core.Contracts.V1;
 
 namespace Twitter.API.Services
 {

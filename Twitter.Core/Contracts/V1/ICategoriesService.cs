@@ -1,6 +1,6 @@
 ﻿using Twitter.Core.Entities;
 
-namespace Twitter.Core.Interfaces
+namespace Twitter.Core.Contracts.V1
 {
     public interface ICategoriesService
     {

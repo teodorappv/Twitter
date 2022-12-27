@@ -2,10 +2,10 @@
 using System.Net;
 using Twitter.API.ActionFilters;
 using Twitter.API.Exceptions;
-using Twitter.Core.Entities;
-using Twitter.Core.Interfaces;
+using Twitter.Core.Contracts;
+using Twitter.Core.Contracts.V1;
 
-namespace Twitter.API.Controllers
+namespace Twitter.API.Services
 {
 
     [ApiController]
@@ -20,26 +20,26 @@ namespace Twitter.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet("Categories")]
+        [HttpGet(ApiRoutes.Categories.GetAll)]
         public async Task<IActionResult> GetCategories()
         {
             return Ok(await _categoriesService.GetCategories());
         }
 
-        [HttpGet("Categories/{id}")]
+        [HttpGet(ApiRoutes.Categories.GetCategory)]
         public async Task<IActionResult> GetCategoryById(int id)
         {
             return Ok(await _categoriesService.GetCategoryById(id));
         }
 
-        [HttpPost("Categories")]
+        [HttpPost(ApiRoutes.Categories.Create)]
         [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(string name)
         {
             return Ok(await _categoriesService.Create(name));
         }
-       
-        [HttpDelete("Categories/{id}")]
+
+        [HttpDelete(ApiRoutes.Categories.Delete)]
         [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> DeleteById(int id)
         {
@@ -47,7 +47,7 @@ namespace Twitter.API.Controllers
             return NoContent();
         }
 
-        [HttpDelete("Categories/DeleteByName/{Name}")]
+        [HttpDelete(ApiRoutes.Categories.DeleteByName)]
         [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> DeleteByName(string Name)
         {

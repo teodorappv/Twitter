@@ -1,4 +1,4 @@
-﻿using Twitter.Core.Interfaces;
+﻿using Twitter.Core.Contracts;
 
 namespace Twitter.API.Services
 {
