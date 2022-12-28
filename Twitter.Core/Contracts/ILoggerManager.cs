@@ -1,4 +1,4 @@
-﻿namespace Twitter.Core.Interfaces
+﻿namespace Twitter.Core.Contracts
 {
     public interface ILoggerManager
     {

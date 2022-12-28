@@ -1,5 +1,5 @@
 ﻿using NLog;
-using Twitter.Core.Interfaces;
+using Twitter.Core.Contracts;
 using ILogger = NLog.ILogger;
 
 namespace Twitter.API.Services
