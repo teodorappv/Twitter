@@ -23,5 +23,11 @@
             public const string Update = Base + "/posts";
             public const string Delete = Base + "/posts/{id}";
         }
+
+        public static class User
+        {
+            public const string Register = Base + "/user/register";
+            public const string Login = Base + "/user/login";
+        }
     }
 }

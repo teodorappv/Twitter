@@ -12,8 +12,4 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="6.0.12" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Contracts\V1\Responses\" />
-  </ItemGroup>
-
 </Project>

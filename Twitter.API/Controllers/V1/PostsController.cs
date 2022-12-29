@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol.Core.Types;
 using System.Net;
 using Twitter.API.ActionFilters;
 using Twitter.API.Exceptions;
-using Twitter.API.Services;
 using Twitter.Core.Contracts;
 using Twitter.Core.Contracts.V1;
 using Twitter.Core.Contracts.V1.Request;
