@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using NLog;
 using System.Text;
@@ -28,6 +30,7 @@ builder.Services.AddDefaultIdentity<AppUser>
         options.Password.RequireUppercase = false;
         options.Password.RequireLowercase = false;
     })
+.AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<TwitterAPIContext>();
 
 builder.Services.AddScoped<ICategoriesService,CategoriesService>();

@@ -10,12 +10,21 @@ namespace Twitter.API.Services
     public class UserService : IUserService
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UserService(UserManager<AppUser> userManager)
+        public UserService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
         }
-        
+
+        public async Task<IdentityRole> CreateRoles(string Name)
+        {
+            var newRole = new IdentityRole() { Name = Name };
+            await _roleManager.CreateAsync(newRole);
+            return newRole;
+        }
+
         public async Task<AppUser> Register(RegisterUserRequest userRequest)
         {
             var userExists = await _userManager.FindByNameAsync(userRequest.Username);

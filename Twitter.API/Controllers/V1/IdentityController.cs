@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol.Core.Types;
 using System.Net;
 using Twitter.API.ActionFilters;
 using Twitter.API.Exceptions;
@@ -18,6 +17,13 @@ namespace Twitter.API.Controllers.V1
             _userService = userService;
         }
 
+        [HttpPost(ApiRoutes.User.CreateRoles)]
+        public async Task<IActionResult> CreateRoles([FromBody] string Name)
+        {
+            var role = await _userService.CreateRoles(Name);
+            return Ok(role);
+        }
+
         [HttpPost(ApiRoutes.User.Register)]
         [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Register([FromBody] RegisterUserRequest userRequest)
@@ -26,6 +32,5 @@ namespace Twitter.API.Controllers.V1
             return Ok(user);
         }
 
-        
     }
 }

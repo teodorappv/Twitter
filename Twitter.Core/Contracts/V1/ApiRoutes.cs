@@ -26,6 +26,7 @@
 
         public static class User
         {
+            public const string CreateRoles = Base + "/user/roles";
             public const string Register = Base + "/user/register";
             public const string Login = Base + "/user/login";
         }
