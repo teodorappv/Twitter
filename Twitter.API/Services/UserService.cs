@@ -1,4 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Twitter.API.Exceptions;
 using Twitter.Core.Contracts.V1;
 using Twitter.Core.Contracts.V1.Request;
@@ -11,11 +15,13 @@ namespace Twitter.API.Services
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IConfiguration _config;
 
-        public UserService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
+        public UserService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration config)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _config = config;
         }
 
         public async Task<IdentityRole> CreateRoles(string Name)
@@ -52,9 +58,49 @@ namespace Twitter.API.Services
             return user;
         }
 
-        public Task<AuthResponse> Login(LoginUserRequest userRequest)
+        public async Task<AuthResponse> Login(LoginUserRequest userRequest)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByNameAsync(userRequest.Username);
+            if (user != null && await _userManager.CheckPasswordAsync(user, userRequest.Password))
+            {
+                var userRoles = await _userManager.GetRolesAsync(user);
+
+                var authClaims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.UserName),
+                };
+
+                foreach (var userRole in userRoles)
+                {
+                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                }
+
+                var token = GenerateToken(authClaims);
+
+                return new AuthResponse
+                {
+                    Success = true,
+                    Token = new JwtSecurityTokenHandler().WriteToken(token)
+                };
+            }
+            else
+            {
+                throw new ValidationRequestException("Username or password is not correct!");
+            }
+        }
+
+        private JwtSecurityToken GenerateToken(List<Claim> authClaims)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtSettings:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+
+            var token = new JwtSecurityToken(
+                expires: DateTime.Now.AddMinutes(30),
+                claims: authClaims,
+                signingCredentials: credentials
+                );
+
+            return token;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Core.Types;
 using System.Net;
 using Twitter.API.ActionFilters;
 using Twitter.API.Exceptions;
@@ -32,5 +33,11 @@ namespace Twitter.API.Controllers.V1
             return Ok(user);
         }
 
+        [HttpPost(ApiRoutes.User.Login)]
+        [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.Unauthorized)]
+        public async Task<IActionResult> Login([FromBody] LoginUserRequest userRequest)
+        {
+            return Ok(await _userService.Login(userRequest));
+        }
     }
 }
