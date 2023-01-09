@@ -18,10 +18,10 @@ namespace Twitter.API.Controllers.V1
             _userService = userService;
         }
 
-        [HttpPost(ApiRoutes.User.CreateRoles)]
-        public async Task<IActionResult> CreateRoles([FromBody] string Name)
+        [HttpPost(ApiRoutes.User.CreateRole)]
+        public async Task<IActionResult> CreateRole([FromBody] string Name)
         {
-            var role = await _userService.CreateRoles(Name);
+            var role = await _userService.CreateRole(Name);
             return Ok(role);
         }
 
@@ -34,7 +34,7 @@ namespace Twitter.API.Controllers.V1
         }
 
         [HttpPost(ApiRoutes.User.Login)]
-        [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.Unauthorized)]
+        [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Login([FromBody] LoginUserRequest userRequest)
         {
             return Ok(await _userService.Login(userRequest));

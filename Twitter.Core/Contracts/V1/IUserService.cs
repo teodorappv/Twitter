@@ -7,7 +7,7 @@ namespace Twitter.Core.Contracts.V1
 {
     public interface IUserService
     {
-        Task<IdentityRole> CreateRoles(string Name);
+        Task<IdentityRole> CreateRole(string Name);
         Task<AppUser> Register(RegisterUserRequest userRequest);
         Task<AuthResponse> Login(LoginUserRequest userRequest);
     }

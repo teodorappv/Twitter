@@ -24,7 +24,7 @@ namespace Twitter.API.Services
             _config = config;
         }
 
-        public async Task<IdentityRole> CreateRoles(string Name)
+        public async Task<IdentityRole> CreateRole(string Name)
         {
             var newRole = new IdentityRole() { Name = Name };
             await _roleManager.CreateAsync(newRole);
