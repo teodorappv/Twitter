@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol.Core.Types;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Twitter.API.ActionFilters;
 using Twitter.API.Exceptions;
-using Twitter.API.Services;
 using Twitter.Core.Contracts;
 using Twitter.Core.Contracts.V1;
 using Twitter.Core.Contracts.V1.Request;
+using Twitter.Core.Entities;
 
 namespace Twitter.API.Controllers.V1
 {
@@ -35,6 +34,7 @@ namespace Twitter.API.Controllers.V1
             return Ok(await _postRepository.GetPostsById(id));
         }
 
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPost(ApiRoutes.Post.Create)]
         [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create([FromBody] CreatePostRequest postRequest)
@@ -43,6 +43,7 @@ namespace Twitter.API.Controllers.V1
             return CreatedAtAction(nameof(Get), new { id = post.Id }, post);
         }
 
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPut(ApiRoutes.Post.Update)]
         [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Update([FromBody] UpdatePostRequest postRequest)
@@ -51,6 +52,7 @@ namespace Twitter.API.Controllers.V1
             return CreatedAtAction(nameof(Get), new { id = post.Id }, post);
         }
 
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpDelete(ApiRoutes.Post.Delete)]
         [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Delete(int id)
