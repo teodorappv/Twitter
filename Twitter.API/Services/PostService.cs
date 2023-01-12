@@ -27,7 +27,7 @@ namespace Twitter.Core.Contracts.V1
             return await _context.Posts.FirstOrDefaultAsync(p => p.Id == id);
         }
         
-        public async Task<Post> CreatePost(CreatePostRequest postRequest)
+        public async Task<Post> CreatePost(Post postRequest)
         {
             if (await _context.Categories.FindAsync(postRequest.CategoryId) == null)
             {

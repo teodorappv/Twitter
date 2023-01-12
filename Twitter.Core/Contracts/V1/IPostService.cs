@@ -7,7 +7,7 @@ namespace Twitter.Core.Contracts.V1
     {
         Task<List<Post>> GetPosts();
         Task<Post> GetPostsById(int id);
-        Task<Post> CreatePost(CreatePostRequest postRequest);
+        Task<Post> CreatePost(Post postRequest);
         Task<Post> UpdatePost(UpdatePostRequest postRequest);
         Task<bool> DeletePost(int id);
        
