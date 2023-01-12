@@ -51,7 +51,7 @@ namespace Twitter.Core.Contracts.V1
             return post;
         }
 
-        public async Task<Post> UpdatePost(UpdatePostRequest postRequest)
+        public async Task<Post> UpdatePost(Post postRequest)
         {
             Post post = await _context.Posts.FirstOrDefaultAsync(post => post.Id.Equals(postRequest.Id));
             

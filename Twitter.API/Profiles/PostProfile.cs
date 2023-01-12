@@ -9,6 +9,7 @@ namespace Twitter.API.Profiles
         public PostProfile()
         {
             CreateMap<CreatePostRequest, Post>();
+            CreateMap<UpdatePostRequest, Post>();
         }
     }
 }

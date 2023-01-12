@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Core.Types;
 using System.Net;
 using Twitter.API.ActionFilters;
 using Twitter.API.Exceptions;
@@ -15,11 +17,15 @@ namespace Twitter.API.Controllers.V1
     {
         private readonly IPostService _postRepository;
         private readonly IMapper _mapper;
+        private IValidator<CreatePostRequest> _createValidator;
+        private IValidator<UpdatePostRequest> _updateValidator;
 
-        public PostsController(IPostService postRepository, IMapper mapper)
+        public PostsController(IPostService postRepository, IMapper mapper, IValidator<CreatePostRequest> createValidator, IValidator<UpdatePostRequest> updateValidator)
         {
             _postRepository = postRepository;
             _mapper = mapper;
+            _createValidator = createValidator;
+            _updateValidator = updateValidator;
         }
 
         [HttpGet(ApiRoutes.Post.GetAll)]
@@ -39,6 +45,11 @@ namespace Twitter.API.Controllers.V1
         [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create([FromBody] CreatePostRequest postRequest)
         {
+            var validationResult = await _createValidator.ValidateAsync(postRequest);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(Results.ValidationProblem(validationResult.ToDictionary(), statusCode: (int)HttpStatusCode.UnprocessableEntity));
+            }
             Post mappedPost = _mapper.Map<Post>(postRequest);
             var post = await _postRepository.CreatePost(mappedPost);
             return CreatedAtAction(nameof(Get), new { id = post.Id }, post);
@@ -49,7 +60,13 @@ namespace Twitter.API.Controllers.V1
         [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Update([FromBody] UpdatePostRequest postRequest)
         {
-            var post = await _postRepository.UpdatePost(postRequest);
+            var validationResult = await _updateValidator.ValidateAsync(postRequest);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(Results.ValidationProblem(validationResult.ToDictionary(), statusCode: (int)HttpStatusCode.UnprocessableEntity));
+            }
+            Post mappedPost = _mapper.Map<Post>(postRequest);
+            var post = await _postRepository.UpdatePost(mappedPost);
             return CreatedAtAction(nameof(Get), new { id = post.Id }, post);
         }
 
