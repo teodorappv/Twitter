@@ -37,7 +37,7 @@ namespace Twitter.API.Controllers.V1
             return Ok(await _postRepository.GetPostsById(id));
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPost(ApiRoutes.Post.Create)]
         [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create([FromBody] CreatePostRequest postRequest)
@@ -47,7 +47,7 @@ namespace Twitter.API.Controllers.V1
             return CreatedAtAction(nameof(Get), new { id = post.Id }, post);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpPut(ApiRoutes.Post.Update)]
         [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Update([FromBody] UpdatePostRequest postRequest)
@@ -65,7 +65,7 @@ namespace Twitter.API.Controllers.V1
             return CreatedAtAction(nameof(Get), new { id = post.Id }, post);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpDelete(ApiRoutes.Post.Delete)]
         [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Delete(int id)

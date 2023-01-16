@@ -53,7 +53,7 @@ namespace Twitter.API.Services
 
             await _userManager.CreateAsync(user, userRequest.Password);
             
-            await _userManager.AddToRoleAsync(user, "User");
+            await _userManager.AddToRoleAsync(user, UserRoles.User);
 
             return user;
         }
