@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Twitter.API.Exceptions;
-using Twitter.Core.Contracts.V1.Request;
 using Twitter.Core.Entities;
 using Twitter.Infrastructure.Data;
 
@@ -26,7 +25,7 @@ namespace Twitter.Core.Contracts.V1
         {
             return await _context.Posts.FirstOrDefaultAsync(p => p.Id == id);
         }
-        
+
         public async Task<Post> CreatePost(Post postRequest)
         {
             if (await _context.Categories.FindAsync(postRequest.CategoryId) == null)
@@ -54,7 +53,7 @@ namespace Twitter.Core.Contracts.V1
         public async Task<Post> UpdatePost(Post postRequest)
         {
             Post post = await _context.Posts.FirstOrDefaultAsync(post => post.Id.Equals(postRequest.Id));
-            
+
             if (post == null)
             {
                 throw new ValidationRequestException("Post with Id: '" + postRequest.Id + "' not found");
@@ -69,7 +68,7 @@ namespace Twitter.Core.Contracts.V1
             post.Text = postRequest.Text;
             _context.Posts.Update(post);
             await _context.SaveChangesAsync();
-            return post; 
+            return post;
         }
 
         public async Task<bool> DeletePost(int id)
@@ -83,6 +82,15 @@ namespace Twitter.Core.Contracts.V1
             var deleted = await _context.SaveChangesAsync();
             return deleted > 0;
         }
-        
+
+        public async Task<bool> IsOwner(int postId, string userId)
+        {
+            var post = await _context.Posts.AsNoTracking().SingleOrDefaultAsync(x => x.Id == postId);
+            if (post == null || post.CreatedById != userId)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

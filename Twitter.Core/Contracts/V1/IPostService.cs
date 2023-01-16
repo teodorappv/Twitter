@@ -10,6 +10,6 @@ namespace Twitter.Core.Contracts.V1
         Task<Post> CreatePost(Post postRequest);
         Task<Post> UpdatePost(Post postRequest);
         Task<bool> DeletePost(int id);
-       
+        Task<bool> IsOwner(int postId, string userId);
     }
 }

@@ -1,5 +1,6 @@
 using AutoMapper;
 using FluentValidation.AspNetCore;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,6 @@ using System.Reflection;
 using System.Text;
 using Twitter.API.Exceptions;
 using Twitter.API.Services;
-using Twitter.API.Validation;
 using Twitter.Core.Contracts;
 using Twitter.Core.Contracts.V1;
 using Twitter.Core.Entities;
@@ -45,13 +45,17 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.ConfigureLoggerService();
-builder.Services.Configure<ApiBehaviorOptions>(options =>
-{
-    options.SuppressModelStateInvalidFilter = true;
-});
 
 builder.Services.AddControllers()
-    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));
+    .AddFluentValidation(options =>
+    {
+        options.ImplicitlyValidateChildProperties = true;
+        options.ImplicitlyValidateRootCollectionElements = true;
+
+        options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+    });
+
+builder.Services.AddFluentValidationRulesToSwagger();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(x =>

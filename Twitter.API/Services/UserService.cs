@@ -53,7 +53,7 @@ namespace Twitter.API.Services
 
             await _userManager.CreateAsync(user, userRequest.Password);
             
-            await _userManager.AddToRoleAsync(user, UserRoles.User);
+            await _userManager.AddToRoleAsync(user, "User");
 
             return user;
         }
@@ -68,6 +68,7 @@ namespace Twitter.API.Services
                 var authClaims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim("id", user.Id)
                 };
 
                 foreach (var userRole in userRoles)
