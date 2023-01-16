@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace Twitter.Core.Entities
+﻿namespace Twitter.Core.Entities
 {
     public class UserRoles
     {

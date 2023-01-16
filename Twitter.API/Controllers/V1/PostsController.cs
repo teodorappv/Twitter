@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Core.Types;
 using System.Net;
+using System.Security.Claims;
 using Twitter.API.ActionFilters;
 using Twitter.API.Exceptions;
-using Twitter.Core.Contracts;
 using Twitter.Core.Contracts.V1;
 using Twitter.Core.Contracts.V1.Request;
 using Twitter.Core.Entities;
@@ -14,12 +17,12 @@ namespace Twitter.API.Controllers.V1
     public class PostsController : ControllerBase
     {
         private readonly IPostService _postRepository;
-        private ILoggerManager _logger;
+        private readonly IMapper _mapper;
 
-        public PostsController(IPostService postRepository, ILoggerManager logger)
+        public PostsController(IPostService postRepository, IMapper mapper)
         {
             _postRepository = postRepository;
-            _logger = logger;
+            _mapper = mapper;
         }
 
         [HttpGet(ApiRoutes.Post.GetAll)]
@@ -39,7 +42,8 @@ namespace Twitter.API.Controllers.V1
         [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create([FromBody] CreatePostRequest postRequest)
         {
-            var post = await _postRepository.CreatePost(postRequest);
+            Post mappedPost = _mapper.Map<Post>(postRequest);
+            var post = await _postRepository.CreatePost(mappedPost);
             return CreatedAtAction(nameof(Get), new { id = post.Id }, post);
         }
 
@@ -48,7 +52,16 @@ namespace Twitter.API.Controllers.V1
         [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Update([FromBody] UpdatePostRequest postRequest)
         {
-            var post = await _postRepository.UpdatePost(postRequest);
+            string claimedId = User.Claims.First(x => x.Type.Equals("id")).Value;
+            var userIsOwner = await _postRepository.IsOwner(postRequest.Id, claimedId);
+
+            if (!userIsOwner)
+            {
+                return BadRequest("You're not the owner of this post!");
+            }
+
+            Post mappedPost = _mapper.Map<Post>(postRequest);
+            var post = await _postRepository.UpdatePost(mappedPost);
             return CreatedAtAction(nameof(Get), new { id = post.Id }, post);
         }
 

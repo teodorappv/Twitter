@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol.Core.Types;
 using System.Net;
 using Twitter.API.ActionFilters;
 using Twitter.API.Exceptions;
