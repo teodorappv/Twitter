@@ -14,7 +14,7 @@ namespace Twitter.UnitTests
         }
 
         [Fact]
-        public void Given_UpdatePost_When_Text_IsEmpty_Then_UpdatePost_Fails()
+        public void Given_UpdatePost_When_TextIsEmpty_Then_UpdatePost_Fails()
         {
             UpdatePostRequest updatePostRequest = new UpdatePostRequest()
             {
@@ -30,7 +30,7 @@ namespace Twitter.UnitTests
         }
 
         [Fact]
-        public void Given_UpdatePost_When_Text_IsNull_Then_UpdatePost_Fails()
+        public void Given_UpdatePost_When_TextIsNull_Then_UpdatePost_Fails()
         {
             UpdatePostRequest updatePostRequest = new UpdatePostRequest()
             {
@@ -46,7 +46,7 @@ namespace Twitter.UnitTests
         }
 
         [Fact]
-        public void Given_UpdatePost_When_CategoryId_IsNull_Then_UpdatePost_Fails()
+        public void Given_UpdatePost_When_CategoryIdIsNull_Then_UpdatePost_Fails()
         {
             UpdatePostRequest updatePostRequest = new UpdatePostRequest()
             {
@@ -59,6 +59,22 @@ namespace Twitter.UnitTests
 
             response.ShouldNotHaveValidationErrorFor(x => x.Text);
             response.ShouldHaveValidationErrorFor(x => x.CategoryId).Only();
+        }
+
+        [Fact]
+        public void Given_UpdatePost_When_ParametersAreValid_Then_UpdatePost_Succeeds()
+        {
+            UpdatePostRequest updatePostRequest = new UpdatePostRequest()
+            {
+                Id = 1,
+                Text = "lorem ipsum",
+                CategoryId = 1
+            };
+
+            var response = _validator.TestValidate(updatePostRequest);
+
+            response.ShouldNotHaveValidationErrorFor(x => x.Text);
+            response.ShouldNotHaveValidationErrorFor(x => x.CategoryId);
         }
     }
 }
