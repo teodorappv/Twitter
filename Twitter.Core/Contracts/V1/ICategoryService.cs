@@ -1,8 +1,8 @@
-﻿using Twitter.Core.Entities;
+﻿using Twitter.Core.Domain.Entities;
 
 namespace Twitter.Core.Contracts.V1
 {
-    public interface ICategoriesService
+    public interface ICategoryService
     {
         Task<List<Category>> GetCategories();
         Task<Category> GetCategoryById(int id);

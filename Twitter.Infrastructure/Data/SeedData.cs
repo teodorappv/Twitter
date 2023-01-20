@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Twitter.Core.Entities;
+using Twitter.Core.Domain.Entities;
 
 namespace Twitter.Infrastructure.Data
 {

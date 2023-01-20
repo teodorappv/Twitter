@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace Twitter.Core.Entities
+namespace Twitter.Core.Domain.Entities
 {
     public class ErrorDetails
     {

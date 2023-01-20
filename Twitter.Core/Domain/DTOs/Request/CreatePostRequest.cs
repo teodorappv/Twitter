@@ -1,11 +1,10 @@
-﻿namespace Twitter.Core.Entities
+﻿namespace Twitter.Core.Domain.DTOs.Request
 {
-    public class Post
+    public class CreatePostRequest
     {
-        public int Id { get; set; }
         public string? Text { get; set; }
-        public DateTime Created { get; set; }
         public int CategoryId { get; set; }
         public string CreatedById { get; set; }
+
     }
 }

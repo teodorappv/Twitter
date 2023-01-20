@@ -1,4 +1,4 @@
-﻿namespace Twitter.Core.Entities;
+﻿namespace Twitter.Core.Domain.Entities;
 
 public partial class Category
 {

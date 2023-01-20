@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Twitter.Core.Contracts.V1.Request;
+using Twitter.Core.Domain.DTOs.Request;
 
 namespace Twitter.API.Validation
 {

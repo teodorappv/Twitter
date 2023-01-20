@@ -5,9 +5,9 @@ using System.Security.Claims;
 using System.Text;
 using Twitter.API.Exceptions;
 using Twitter.Core.Contracts.V1;
-using Twitter.Core.Contracts.V1.Request;
-using Twitter.Core.Contracts.V1.Responses;
-using Twitter.Core.Entities;
+using Twitter.Core.Domain.DTOs.Request;
+using Twitter.Core.Domain.DTOs.Responses;
+using Twitter.Core.Domain.Entities;
 
 namespace Twitter.API.Services
 {
