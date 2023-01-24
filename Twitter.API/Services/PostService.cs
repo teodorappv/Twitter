@@ -32,22 +32,13 @@ namespace Twitter.Core.Contracts.V1
             {
                 throw new ValidationRequestException("Category with Id: '" + postRequest.CategoryId + "' not found");
             }
-            if (await _context.Users.FindAsync(postRequest.CreatedById) == null)
-            {
-                throw new ValidationRequestException("User with Id: '" + postRequest.CreatedById + "' not found");
-            }
-            var post = new Post
-            {
-                Text = postRequest.Text,
-                Created = DateTime.Now,
-                CategoryId = postRequest.CategoryId,
-                CreatedById = postRequest.CreatedById
-            };
 
-            await _context.Posts.AddAsync(post);
+            postRequest.Created = DateTime.Now;
+
+            await _context.Posts.AddAsync(postRequest);
             await _context.SaveChangesAsync();
 
-            return post;
+            return postRequest;
         }
 
         public async Task<Post> UpdatePost(Post postRequest)

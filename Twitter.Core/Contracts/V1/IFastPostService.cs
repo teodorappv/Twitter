@@ -6,5 +6,7 @@ namespace Twitter.Core.Contracts.V1
     {
         Task<FastPost> CreateFastPost(FastPost request);
         Task<FastPost> ReadFastPost(int id);
+        Task<List<FastPost>> ReadAllFastPosts();
+        Task<bool> DeleteFastPost (int id);
     }
 }

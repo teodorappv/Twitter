@@ -35,6 +35,8 @@
         {
             public const string Create = Base + "/fastposts";
             public const string GetFastPost = Base + "/fastposts/{id}";
+            public const string GetAll = Base + "/fastposts";
+            public const string Delete = Base + "/fastposts/{id}";
         }
     }
 }

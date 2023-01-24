@@ -41,6 +41,7 @@ namespace Twitter.API.Controllers.V1
         public async Task<IActionResult> Create([FromBody] CreatePostRequest postRequest)
         {
             Post mappedPost = _mapper.Map<Post>(postRequest);
+            mappedPost.CreatedById = User.Claims.First(x => x.Type.Equals("id")).Value;
             var post = await _service.CreatePost(mappedPost);
             return CreatedAtAction(nameof(Get), new { id = post.Id }, post);
         }

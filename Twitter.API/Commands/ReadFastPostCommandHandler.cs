@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using NuGet.Protocol.Core.Types;
 using Twitter.Core.Contracts.V1;
 using Twitter.Core.Domain.Entities;
 

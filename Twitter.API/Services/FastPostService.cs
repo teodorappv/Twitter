@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 using Twitter.API.Exceptions;
 using Twitter.Core.Contracts.V1;
 using Twitter.Core.Domain.Entities;
@@ -32,19 +31,26 @@ namespace Twitter.API.Services
 
         public async Task<FastPost> ReadFastPost(int id)
         {
-            var fastPost = await _context.FastPosts.FirstOrDefaultAsync(p => p.Id == id);
+            var time = DateTime.Now.AddHours(-24);
+            var fastPost = await _context.FastPosts.FirstOrDefaultAsync(p => p.Id == id && p.Created > time);
+
             if (fastPost == null)
             {
-                throw new ValidationRequestException("FastPost with Id: '" + id + "' doesn't exist!");
+                throw new ValidationRequestException("Tweet with Id: '" + id + "' not found!");
             }
 
-            var time = DateTime.Now.Subtract(fastPost.Created).TotalHours;
-            if (time > 24)
-            {
-                throw new ValidationRequestException("24 hours passed since creation! Tweet with Id: '" + id + "' not found!");
-            }
-           
             return fastPost;
+        }
+
+        public async Task<List<FastPost>> ReadAllFastPosts()
+        {
+            var time = DateTime.Now.AddHours(-24);
+            return await _context.FastPosts.Where(p => p.Created > time).ToListAsync();
+        }
+
+        public Task<bool> DeleteFastPost(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
