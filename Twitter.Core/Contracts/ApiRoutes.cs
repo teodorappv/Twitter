@@ -34,6 +34,7 @@
         public static class FastPost
         {
             public const string Create = Base + "/fastposts";
+            public const string GetFastPost = Base + "/fastposts/{id}";
         }
     }
 }

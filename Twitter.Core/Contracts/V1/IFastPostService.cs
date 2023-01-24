@@ -5,5 +5,6 @@ namespace Twitter.Core.Contracts.V1
     public interface IFastPostService
     {
         Task<FastPost> CreateFastPost(FastPost request);
+        Task<FastPost> ReadFastPost(int id);
     }
 }

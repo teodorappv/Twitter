@@ -5,6 +5,8 @@ using Twitter.API.ActionFilters;
 using Twitter.API.Commands;
 using Twitter.API.Exceptions;
 using Twitter.Core.Contracts;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Twitter.API.Controllers.V1
 {
@@ -23,6 +25,14 @@ namespace Twitter.API.Controllers.V1
         public async Task<IActionResult> Create([FromBody] CreateFastPostCommand command)
         {
             var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpGet(ApiRoutes.FastPost.GetFastPost)]
+        [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> ReadFastPost(int id)
+        {
+            var result = await _mediator.Send(new ReadFastPostCommand(id));
             return Ok(result);
         }
     }
