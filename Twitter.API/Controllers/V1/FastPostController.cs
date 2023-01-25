@@ -41,6 +41,13 @@ namespace Twitter.API.Controllers.V1
             var result = await _mediator.Send(new ReadAllFastPostsCommand());
             return Ok(result);
         }
-        
+
+        [HttpDelete(ApiRoutes.FastPost.Delete)]
+        [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
+        public async Task<ActionResult> DeleteFastPost(int id)
+        {
+            await _mediator.Send(new DeleteFastPostCommand(id));
+            return NoContent();
+        }
     }
 }

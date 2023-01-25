@@ -48,9 +48,18 @@ namespace Twitter.API.Services
             return await _context.FastPosts.Where(p => p.Created > time).ToListAsync();
         }
 
-        public Task<bool> DeleteFastPost(int id)
+        public async Task<bool> DeleteFastPost(int id)
         {
-            throw new NotImplementedException();
+            var time = DateTime.Now.AddHours(-24);
+            var fastPost = await _context.FastPosts.FirstOrDefaultAsync(p => p.Id == id && p.Created > time);
+
+            if (fastPost == null)
+            {
+                throw new ValidationRequestException("Tweet with Id: '" + id + "' not found!");
+            }
+            _context.FastPosts.Remove(fastPost);
+            var deleted = await _context.SaveChangesAsync();
+            return deleted > 0;
         }
     }
 }
