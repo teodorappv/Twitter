@@ -1,9 +1,9 @@
 using AutoMapper;
 using FluentValidation.AspNetCore;
+using MediatR;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -14,7 +14,7 @@ using Twitter.API.Exceptions;
 using Twitter.API.Services;
 using Twitter.Core.Contracts;
 using Twitter.Core.Contracts.V1;
-using Twitter.Core.Entities;
+using Twitter.Core.Domain.Entities;
 using Twitter.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,11 +38,13 @@ builder.Services.AddDefaultIdentity<AppUser>
 .AddEntityFrameworkStores<TwitterAPIContext>()
 .AddDefaultTokenProviders();
 
-builder.Services.AddScoped<ICategoriesService, CategoriesService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IFastPostService, FastPostService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddMediatR(typeof(Program));
 
 builder.Services.ConfigureLoggerService();
 

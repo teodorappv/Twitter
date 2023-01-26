@@ -1,4 +1,4 @@
-﻿namespace Twitter.Core.Contracts.V1
+﻿namespace Twitter.Core.Contracts
 {
     public static class ApiRoutes
     {
@@ -29,6 +29,14 @@
             public const string CreateRole = Base + "/user/roles";
             public const string Register = Base + "/user/register";
             public const string Login = Base + "/user/login";
+        }
+
+        public static class FastPost
+        {
+            public const string Create = Base + "/fastposts";
+            public const string GetFastPost = Base + "/fastposts/{id}";
+            public const string GetAll = Base + "/fastposts";
+            public const string Delete = Base + "/fastposts/{id}";
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Twitter.Core.Contracts.V1.Request;
-using Twitter.Core.Entities;
+﻿using Twitter.Core.Domain.Entities;
 
 namespace Twitter.Core.Contracts.V1
 {

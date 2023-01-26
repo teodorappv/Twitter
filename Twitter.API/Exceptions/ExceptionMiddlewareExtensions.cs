@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
 using Twitter.Core.Contracts;
-using Twitter.Core.Entities;
+using Twitter.Core.Domain.Entities;
 
 namespace Twitter.API.Exceptions;
 

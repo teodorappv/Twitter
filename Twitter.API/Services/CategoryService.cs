@@ -1,18 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Twitter.API.Exceptions;
-using Twitter.Core.Entities;
 using Twitter.Core.Contracts;
 using Twitter.Infrastructure.Data;
 using Twitter.Core.Contracts.V1;
+using Twitter.Core.Domain.Entities;
 
 namespace Twitter.API.Services
 {
-    public class CategoriesService : ICategoriesService
+    public class CategoryService : ICategoryService
     {
         private readonly TwitterAPIContext _context;
         private ILoggerManager _logger;
 
-        public CategoriesService(TwitterAPIContext context, ILoggerManager logger)
+        public CategoryService(TwitterAPIContext context, ILoggerManager logger)
         {
             _context = context;
             _logger = logger;

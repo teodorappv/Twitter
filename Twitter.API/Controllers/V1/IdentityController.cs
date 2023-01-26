@@ -2,25 +2,26 @@
 using System.Net;
 using Twitter.API.ActionFilters;
 using Twitter.API.Exceptions;
+using Twitter.Core.Contracts;
 using Twitter.Core.Contracts.V1;
-using Twitter.Core.Contracts.V1.Request;
+using Twitter.Core.Domain.DTOs.Request;
 
 namespace Twitter.API.Controllers.V1
 {
     [ApiController]
     public class IdentityController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IUserService _service;
 
-        public IdentityController(IUserService userService)
+        public IdentityController(IUserService service)
         {
-            _userService = userService;
+            _service = service;
         }
 
         [HttpPost(ApiRoutes.User.CreateRole)]
         public async Task<IActionResult> CreateRole([FromBody] string Name)
         {
-            var role = await _userService.CreateRole(Name);
+            var role = await _service.CreateRole(Name);
             return Ok(role);
         }
 
@@ -28,7 +29,7 @@ namespace Twitter.API.Controllers.V1
         [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Register([FromBody] RegisterUserRequest userRequest)
         {
-            var user = await _userService.Register(userRequest);
+            var user = await _service.Register(userRequest);
             return Ok(user);
         }
 
@@ -36,7 +37,7 @@ namespace Twitter.API.Controllers.V1
         [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Login([FromBody] LoginUserRequest userRequest)
         {
-            return Ok(await _userService.Login(userRequest));
+            return Ok(await _service.Login(userRequest));
         }
     }
 }

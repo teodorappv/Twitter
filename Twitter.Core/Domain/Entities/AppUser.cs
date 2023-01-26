@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Twitter.Core.Entities
+namespace Twitter.Core.Domain.Entities
 {
     public class AppUser : IdentityUser
     {
