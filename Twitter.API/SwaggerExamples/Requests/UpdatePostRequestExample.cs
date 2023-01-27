@@ -1,7 +1,7 @@
 ﻿using Swashbuckle.AspNetCore.Filters;
-using Twitter.Core.Domain.DTOs.Request;
+using Twitter.Core.Domain.DTOs.Requests;
 
-namespace Twitter.API.SwaggerExamples.Request
+namespace Twitter.API.SwaggerExamples.Requests
 {
     public class UpdatePostRequestExample : IExamplesProvider<UpdatePostRequest>
     {

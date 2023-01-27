@@ -20,7 +20,7 @@ namespace Twitter.API.Services
 
         public async Task<List<Post>> GetPosts()
         {
-            return await _context.Posts.ToListAsync(); ;
+            return await _context.Posts.ToListAsync();
         }
 
         public async Task<Post> GetPostsById(int id)

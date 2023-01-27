@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using Twitter.API.Exceptions;
 using Twitter.Core.Contracts.V1;
-using Twitter.Core.Domain.DTOs.Request;
+using Twitter.Core.Domain.DTOs.Requests;
 using Twitter.Core.Domain.DTOs.Responses;
 using Twitter.Core.Domain.Entities;
 

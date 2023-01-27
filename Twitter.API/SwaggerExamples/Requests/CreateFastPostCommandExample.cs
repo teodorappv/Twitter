@@ -1,7 +1,7 @@
 ﻿using Swashbuckle.AspNetCore.Filters;
 using Twitter.API.Commands;
 
-namespace Twitter.API.SwaggerExamples.Request
+namespace Twitter.API.SwaggerExamples.Requests
 {
     public class CreateFastPostCommandExample : IExamplesProvider<CreateFastPostCommand>
     {

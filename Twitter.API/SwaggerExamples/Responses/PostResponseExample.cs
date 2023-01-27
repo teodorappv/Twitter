@@ -13,7 +13,7 @@ namespace Twitter.API.SwaggerExamples.Responses
                 Text = "lorem ipsum",
                 Created = DateTime.Now,
                 CategoryId = 1,
-                CreatedById = "cd4ce98c - ce4e - 415d - a046 - 0fcce677b16c"
+                CreatedById = Guid.NewGuid().ToString()
             };
         }
     }
