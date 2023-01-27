@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
+using Twitter.Core.Domain.Entities;
 
 namespace Twitter.API.ActionFilters
 {
@@ -22,7 +23,11 @@ namespace Twitter.API.ActionFilters
             {
                 context.HttpContext.Response.StatusCode = (int)_statusCode;
                 context.HttpContext.Response.ContentType = "application/json";
-                await context.HttpContext.Response.WriteAsync(exception.Message);
+                await context.HttpContext.Response.WriteAsync(new ErrorDetails()
+                {
+                    StatusCode = context.HttpContext.Response.StatusCode,
+                    Message = exception.Message
+                }.ToString());
                 context.ExceptionHandled = true;
             }
         }

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog;
+using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 using System.Text;
 using Twitter.API.Exceptions;
@@ -58,11 +59,13 @@ builder.Services.AddControllers()
     });
 
 builder.Services.AddFluentValidationRulesToSwagger();
-
+builder.Services.AddSwaggerExamplesFromAssemblies(Assembly.GetEntryAssembly());
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(x =>
 {
     x.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
+
+    x.ExampleFilters();
 
     x.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -91,6 +94,10 @@ builder.Services.AddSwaggerGen(x =>
             new List<string>()
           }
         });
+
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    x.IncludeXmlComments(xmlPath);
 });
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

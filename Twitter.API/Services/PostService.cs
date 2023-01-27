@@ -2,8 +2,10 @@
 using Twitter.API.Exceptions;
 using Twitter.Core.Domain.Entities;
 using Twitter.Infrastructure.Data;
+using Twitter.Core.Contracts.V1;
+using Twitter.Core.Contracts;
 
-namespace Twitter.Core.Contracts.V1
+namespace Twitter.API.Services
 {
     public class PostService : IPostService
     {
@@ -18,12 +20,17 @@ namespace Twitter.Core.Contracts.V1
 
         public async Task<List<Post>> GetPosts()
         {
-            return await _context.Posts.ToListAsync();
+            return await _context.Posts.ToListAsync(); ;
         }
 
         public async Task<Post> GetPostsById(int id)
         {
-            return await _context.Posts.FirstOrDefaultAsync(p => p.Id == id);
+            var post = await _context.Posts.FirstOrDefaultAsync(p => p.Id == id);
+            if (post == null)
+            {
+                throw new ValidationRequestException("Post with Id: '" + id + "' doesn't exist.");
+            }
+            return post;
         }
 
         public async Task<Post> CreatePost(Post postRequest)
@@ -43,7 +50,7 @@ namespace Twitter.Core.Contracts.V1
 
         public async Task<Post> UpdatePost(Post postRequest)
         {
-            Post post = await _context.Posts.FirstOrDefaultAsync(post => post.Id.Equals(postRequest.Id));
+            var post = await _context.Posts.FirstOrDefaultAsync(post => post.Id.Equals(postRequest.Id));
 
             if (post == null)
             {
@@ -65,10 +72,6 @@ namespace Twitter.Core.Contracts.V1
         public async Task<bool> DeletePost(int id)
         {
             var existingPost = await GetPostsById(id);
-            if (existingPost == null)
-            {
-                throw new ValidationRequestException("This id doesn't exist.");
-            }
             _context.Posts.Remove(existingPost);
             var deleted = await _context.SaveChangesAsync();
             return deleted > 0;
