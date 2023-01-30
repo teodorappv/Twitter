@@ -30,11 +30,14 @@ namespace Twitter.API.Controllers.V1
         [HttpPost(ApiRoutes.FastPost.Create)]
         [ProducesResponseType(typeof(FastPost), 200)]
         [ProducesResponseType(typeof(ErrorDetails), 400)]
-        [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Create([FromBody] CreateFastPostCommand command)
+        public async Task<ActionResult> Create([FromBody] CreateFastPostCommand command)
         {
             var result = await _mediator.Send(command);
-            return Ok(result);
+            if (result.IsFailed)
+            {
+                return BadRequest(result.Reasons);
+            }
+            return Ok(result.Value);
         }
 
         /// <summary>
