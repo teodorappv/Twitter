@@ -4,7 +4,7 @@ using Twitter.API.ActionFilters;
 using Twitter.API.Exceptions;
 using Twitter.Core.Contracts;
 using Twitter.Core.Contracts.V1;
-using Twitter.Core.Domain.DTOs.Request;
+using Twitter.Core.Domain.DTOs.Requests;
 
 namespace Twitter.API.Controllers.V1
 {

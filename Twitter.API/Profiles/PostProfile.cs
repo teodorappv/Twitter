@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Twitter.Core.Domain.DTOs.Request;
+using Twitter.Core.Domain.DTOs.Requests;
 using Twitter.Core.Domain.Entities;
 
 namespace Twitter.API.Profiles

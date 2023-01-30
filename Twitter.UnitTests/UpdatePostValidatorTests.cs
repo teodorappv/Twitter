@@ -1,6 +1,6 @@
 ﻿using FluentValidation.TestHelper;
 using Twitter.API.Validation;
-using Twitter.Core.Domain.DTOs.Request;
+using Twitter.Core.Domain.DTOs.Requests;
 
 namespace Twitter.UnitTests
 {

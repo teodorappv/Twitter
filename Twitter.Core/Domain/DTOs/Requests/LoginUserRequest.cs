@@ -1,4 +1,4 @@
-﻿namespace Twitter.Core.Domain.DTOs.Request
+﻿namespace Twitter.Core.Domain.DTOs.Requests
 {
     public class LoginUserRequest
     {
