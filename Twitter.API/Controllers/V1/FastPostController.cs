@@ -1,9 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
-using Twitter.API.ActionFilters;
 using Twitter.API.Commands;
-using Twitter.API.Exceptions;
 using Twitter.Core.Contracts;
 using Twitter.Core.Domain.Entities;
 
@@ -30,7 +27,7 @@ namespace Twitter.API.Controllers.V1
         [HttpPost(ApiRoutes.FastPost.Create)]
         [ProducesResponseType(typeof(FastPost), 200)]
         [ProducesResponseType(typeof(ErrorDetails), 400)]
-        public async Task<ActionResult> Create([FromBody] CreateFastPostCommand command)
+        public async Task<IActionResult> Create([FromBody] CreateFastPostCommand command)
         {
             var result = await _mediator.Send(command);
             if (result.IsFailed)
@@ -50,11 +47,14 @@ namespace Twitter.API.Controllers.V1
         [HttpGet(ApiRoutes.FastPost.GetFastPost)]
         [ProducesResponseType(typeof(FastPost), 200)]
         [ProducesResponseType(typeof(ErrorDetails), 400)]
-        [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ReadFastPost(int id)
         {
             var result = await _mediator.Send(new ReadFastPostCommand(id));
-            return Ok(result);
+            if (result.IsFailed)
+            {
+                return BadRequest(result.Reasons);
+            }
+            return Ok(result.Value);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Twitter.API.Controllers.V1
         public async Task<IActionResult> ReadAllFastPost()
         {
             var result = await _mediator.Send(new ReadAllFastPostsCommand());
-            return Ok(result);
+            return Ok(result.Value);
         }
 
         /// <summary>
@@ -78,10 +78,13 @@ namespace Twitter.API.Controllers.V1
 		/// <response code = "400">Fast post doesn't exists.</response>
         [HttpDelete(ApiRoutes.FastPost.Delete)]
         [ProducesResponseType(typeof(ErrorDetails), 400)]
-        [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<ActionResult> DeleteFastPost(int id)
         {
-            await _mediator.Send(new DeleteFastPostCommand(id));
+            var result = await _mediator.Send(new DeleteFastPostCommand(id));
+            if (result.IsFailed)
+            {
+                return BadRequest(result.Reasons);
+            }
             return NoContent();
         }
     }

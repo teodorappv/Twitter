@@ -4,6 +4,7 @@ using Twitter.Core.Domain.Entities;
 using Twitter.Infrastructure.Data;
 using Twitter.Core.Contracts.V1;
 using Twitter.Core.Contracts;
+using FluentResults;
 
 namespace Twitter.API.Services
 {
@@ -48,25 +49,25 @@ namespace Twitter.API.Services
             return postRequest;
         }
 
-        public async Task<Post> UpdatePost(Post postRequest)
+        public async Task<Result<Post>> UpdatePost(Post postRequest)
         {
             var post = await _context.Posts.FirstOrDefaultAsync(post => post.Id.Equals(postRequest.Id));
 
             if (post == null)
             {
-                throw new ValidationRequestException("Post with Id: '" + postRequest.Id + "' not found");
+                return Result.Fail(new Error("Post with Id: '" + postRequest.Id + "' not found"));
             }
 
             if (await _context.Categories.FindAsync(postRequest.CategoryId) == null)
             {
-                throw new ValidationRequestException("Category with Id: '" + postRequest.CategoryId + "' not found");
+                return Result.Fail(new Error("Category with Id: '" + postRequest.CategoryId + "' not found"));
             }
 
             post.CategoryId = postRequest.CategoryId;
             post.Text = postRequest.Text;
             _context.Posts.Update(post);
             await _context.SaveChangesAsync();
-            return post;
+            return Result.Ok(post);
         }
 
         public async Task<bool> DeletePost(int id)

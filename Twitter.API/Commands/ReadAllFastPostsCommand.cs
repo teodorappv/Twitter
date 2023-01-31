@@ -1,9 +1,10 @@
-﻿using MediatR;
+﻿using FluentResults;
+using MediatR;
 using Twitter.Core.Domain.Entities;
 
 namespace Twitter.API.Commands
 {
-    public class ReadAllFastPostsCommand : IRequest<List<FastPost>>
+    public class ReadAllFastPostsCommand : IRequest<Result<List<FastPost>>>
     {
     }
 }
