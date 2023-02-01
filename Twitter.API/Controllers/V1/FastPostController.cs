@@ -32,7 +32,7 @@ namespace Twitter.API.Controllers.V1
             var result = await _mediator.Send(command);
             if (result.IsFailed)
             {
-                return BadRequest(result.Reasons);
+                return BadRequest(result.Errors.First().Message);
             }
             return Ok(result.Value);
         }
@@ -52,7 +52,7 @@ namespace Twitter.API.Controllers.V1
             var result = await _mediator.Send(new ReadFastPostCommand(id));
             if (result.IsFailed)
             {
-                return BadRequest(result.Reasons);
+                return BadRequest(result.Errors.First().Message);
             }
             return Ok(result.Value);
         }
@@ -83,7 +83,7 @@ namespace Twitter.API.Controllers.V1
             var result = await _mediator.Send(new DeleteFastPostCommand(id));
             if (result.IsFailed)
             {
-                return BadRequest(result.Reasons);
+                return BadRequest(result.Errors.First().Message);
             }
             return NoContent();
         }

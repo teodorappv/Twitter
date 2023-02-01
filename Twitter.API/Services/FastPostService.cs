@@ -1,6 +1,5 @@
 ﻿using FluentResults;
 using Microsoft.EntityFrameworkCore;
-using Twitter.API.Exceptions;
 using Twitter.Core.Contracts.V1;
 using Twitter.Core.Domain.Entities;
 using Twitter.Infrastructure.Data;
