@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -94,9 +93,10 @@ namespace Twitter.API.Controllers.V1
             }
             Post mappedPost = _mapper.Map<Post>(postRequest);
             var post = await _service.UpdatePost(mappedPost);
+            int counter = 1;
             if (post.IsFailed)
             {
-                return BadRequest(post.Errors.First().Message);
+                return BadRequest("Errors: " + post.Errors.Select(e => "Error " + counter++ + ": " + e.Message).Aggregate((i, j) => i + "; " + j));
             }
             return CreatedAtAction(nameof(Get), new { id = post.Value.Id }, post.Value);
         }

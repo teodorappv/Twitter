@@ -62,7 +62,7 @@ namespace Twitter.API.Services
             {
                 return Result.Fail(new Error("Category with Id: '" + postRequest.CategoryId + "' not found"));
             }
-
+            
             post.CategoryId = postRequest.CategoryId;
             post.Text = postRequest.Text;
             _context.Posts.Update(post);

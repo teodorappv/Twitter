@@ -30,9 +30,10 @@ namespace Twitter.API.Controllers.V1
         public async Task<IActionResult> Create([FromBody] CreateFastPostCommand command)
         {
             var result = await _mediator.Send(command);
+            int counter = 1;
             if (result.IsFailed)
             {
-                return BadRequest(result.Errors.First().Message);
+                return BadRequest("Errors: " + result.Errors.Select(e => "Error " + counter++ + ": " + e.Message).Aggregate((i, j) => i + "; " + j));
             }
             return Ok(result.Value);
         }
@@ -50,9 +51,10 @@ namespace Twitter.API.Controllers.V1
         public async Task<IActionResult> ReadFastPost(int id)
         {
             var result = await _mediator.Send(new ReadFastPostCommand(id));
+            int counter = 1;
             if (result.IsFailed)
             {
-                return BadRequest(result.Errors.First().Message);
+                return BadRequest("Errors: " + result.Errors.Select(e => "Error " + counter++ + ": " + e.Message).Aggregate((i, j) => i + "; " + j));
             }
             return Ok(result.Value);
         }
@@ -81,9 +83,10 @@ namespace Twitter.API.Controllers.V1
         public async Task<ActionResult> DeleteFastPost(int id)
         {
             var result = await _mediator.Send(new DeleteFastPostCommand(id));
+            int counter = 1;
             if (result.IsFailed)
             {
-                return BadRequest(result.Errors.First().Message);
+                return BadRequest("Errors: " + result.Errors.Select(e => "Error " + counter++ + ": " + e.Message).Aggregate((i, j) => i + "; " + j));
             }
             return NoContent();
         }
