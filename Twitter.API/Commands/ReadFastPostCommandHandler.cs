@@ -1,10 +1,11 @@
-﻿using MediatR;
+﻿using FluentResults;
+using MediatR;
 using Twitter.Core.Contracts.V1;
 using Twitter.Core.Domain.Entities;
 
 namespace Twitter.API.Commands
 {
-    public class ReadFastPostCommandHandler : IRequestHandler<ReadFastPostCommand, FastPost>
+    public class ReadFastPostCommandHandler : IRequestHandler<ReadFastPostCommand, Result<FastPost>>
     {
         private readonly IFastPostService _service;
 
@@ -13,10 +14,10 @@ namespace Twitter.API.Commands
             _service = service;
         }
 
-        public async Task<FastPost> Handle(ReadFastPostCommand request, CancellationToken cancellationToken)
+        public async Task<Result<FastPost>> Handle(ReadFastPostCommand request, CancellationToken cancellationToken)
         {
-            var fastPost = await _service.ReadFastPost(request.Id);
-            return fastPost;
+            var result = await _service.ReadFastPost(request.Id);
+            return result;
         }
     }
 }

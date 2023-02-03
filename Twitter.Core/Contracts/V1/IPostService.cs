@@ -1,4 +1,5 @@
-﻿using Twitter.Core.Domain.Entities;
+﻿using FluentResults;
+using Twitter.Core.Domain.Entities;
 
 namespace Twitter.Core.Contracts.V1
 {
@@ -7,7 +8,7 @@ namespace Twitter.Core.Contracts.V1
         Task<List<Post>> GetPosts();
         Task<Post> GetPostsById(int id);
         Task<Post> CreatePost(Post postRequest);
-        Task<Post> UpdatePost(Post postRequest);
+        Task<Result<Post>> UpdatePost(Post postRequest);
         Task<bool> DeletePost(int id);
         Task<bool> IsOwner(int postId, string userId);
     }

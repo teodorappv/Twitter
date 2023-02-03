@@ -83,20 +83,22 @@ namespace Twitter.API.Controllers.V1
         [HttpPut(ApiRoutes.Post.Update)]
         [ProducesResponseType(typeof(Post), 200)]
         [ProducesResponseType(typeof(ErrorDetails), 400)]
-        [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Update([FromBody] UpdatePostRequest postRequest)
         {
             string claimedId = User.Claims.First(x => x.Type.Equals("id")).Value;
             var userIsOwner = await _service.IsOwner(postRequest.Id, claimedId);
-
             if (!userIsOwner)
             {
                 return BadRequest("You're not the owner of this post!");
             }
-
             Post mappedPost = _mapper.Map<Post>(postRequest);
             var post = await _service.UpdatePost(mappedPost);
-            return CreatedAtAction(nameof(Get), new { id = post.Id }, post);
+            int counter = 1;
+            if (post.IsFailed)
+            {
+                return BadRequest("Errors: " + post.Errors.Select(e => "Error " + counter++ + ": " + e.Message).Aggregate((i, j) => i + "; " + j));
+            }
+            return CreatedAtAction(nameof(Get), new { id = post.Value.Id }, post.Value);
         }
 
         /// <summary>

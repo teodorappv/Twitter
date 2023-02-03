@@ -1,9 +1,10 @@
-﻿using MediatR;
+﻿using FluentResults;
+using MediatR;
 using Twitter.Core.Domain.Entities;
 
 namespace Twitter.API.Commands
 {
-    public class ReadFastPostCommand : IRequest<FastPost>
+    public class ReadFastPostCommand : IRequest<Result<FastPost>>
     {
         public int Id { get; set; }
         
