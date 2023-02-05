@@ -26,7 +26,7 @@ namespace Twitter.API.Services
 
         public async Task<Post> GetPostsById(int id)
         {
-            var post = await _context.Posts.FirstOrDefaultAsync(p => p.Id == id);
+            var post = await _context.Posts.SingleOrDefaultAsync(p => p.Id == id && p.IsArchived == false);
             if (post == null)
             {
                 throw new ValidationRequestException("Post with Id: '" + id + "' doesn't exist.");
@@ -51,7 +51,7 @@ namespace Twitter.API.Services
 
         public async Task<Result<Post>> UpdatePost(Post postRequest)
         {
-            var post = await _context.Posts.FirstOrDefaultAsync(post => post.Id.Equals(postRequest.Id));
+            var post = await _context.Posts.SingleOrDefaultAsync(post => post.Id.Equals(postRequest.Id) && post.IsArchived == false);
 
             if (post == null)
             {
@@ -73,9 +73,10 @@ namespace Twitter.API.Services
         public async Task<bool> DeletePost(int id)
         {
             var existingPost = await GetPostsById(id);
-            _context.Posts.Remove(existingPost);
-            var deleted = await _context.SaveChangesAsync();
-            return deleted > 0;
+            existingPost.IsArchived = true;
+            _context.Posts.Update(existingPost);
+            var updatedPost = await _context.SaveChangesAsync();
+            return updatedPost > 0;
         }
 
         public async Task<bool> IsOwner(int postId, string userId)
