@@ -7,5 +7,6 @@
         public DateTime Created { get; set; }
         public int CategoryId { get; set; }
         public string CreatedById { get; set; }
+        public bool IsArchived { get; set; } = false;
     }
 }

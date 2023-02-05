@@ -3,17 +3,19 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Twitter.Infrastructure.Data;
 
 #nullable disable
 
-namespace Twitter.API.Migrations
+namespace Twitter.Infrastructure.Migrations
 {
     [DbContext(typeof(TwitterAPIContext))]
-    partial class TwitterAPIContextModelSnapshot : ModelSnapshot
+    [Migration("20230205130743_isArchivedAddedToPost")]
+    partial class isArchivedAddedToPost
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
