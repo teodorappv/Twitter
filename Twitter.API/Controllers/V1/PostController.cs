@@ -51,6 +51,18 @@ namespace Twitter.API.Controllers.V1
         }
 
         /// <summary>
+        /// Returns a number of available posts.
+        /// </summary>
+        /// <returns>Returns a number of available posts.</returns>
+        /// <response code = "200">Successfully returned number of available posts.</response>
+        [HttpGet(ApiRoutes.Post.NumberOfAvailablePosts)]
+        [ProducesResponseType(typeof(int), 200)]
+        public async Task<ActionResult<int>> NumberOfAvailablePosts([FromQuery] int? categoryId)
+        {
+            return Ok(await _service.NumberOfAvailablePosts(categoryId));
+        }
+
+        /// <summary>
         /// Returns a post.
         /// </summary>
         /// <param name="id">if post doesn't exists, an exception will be thrown</param>

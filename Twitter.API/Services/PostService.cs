@@ -34,6 +34,15 @@ namespace Twitter.API.Services
                 Skip((postParameters.PageNumber - 1) * postParameters.PageSize).Take(postParameters.PageSize).ToListAsync();
         }
 
+        public async Task<int> NumberOfAvailablePosts (int? categoryId)
+        {
+            if(categoryId == null)
+            {
+                return await _context.Posts.Where(p => p.IsArchived == false).CountAsync();
+            }
+            return await _context.Posts.Where(p => p.IsArchived == false && p.CategoryId == categoryId).CountAsync();
+        }
+
         public async Task<Post> GetPostById(int id)
         {
             var post = await _context.Posts.SingleOrDefaultAsync(p => p.Id == id && p.IsArchived == false);
