@@ -24,7 +24,17 @@ namespace Twitter.API.Services
             return await _context.Posts.ToListAsync();
         }
 
-        public async Task<Post> GetPostsById(int id)
+        public async Task<List<Post>> ReadAllPosts(PostParameters postParameters)
+        {
+            if (postParameters.CategoryId.Equals(null))
+            {
+                return await _context.Posts.Where(p => p.IsArchived == false).OrderBy(p => p.Created).ToListAsync();
+            }
+            return await _context.Posts.Where(p => p.CategoryId == postParameters.CategoryId && p.IsArchived == false).OrderBy(p => p.Created).
+                Skip((postParameters.PageNumber - 1) * postParameters.PageSize).Take(postParameters.PageSize).ToListAsync();
+        }
+
+        public async Task<Post> GetPostById(int id)
         {
             var post = await _context.Posts.SingleOrDefaultAsync(p => p.Id == id && p.IsArchived == false);
             if (post == null)
@@ -72,7 +82,7 @@ namespace Twitter.API.Services
 
         public async Task<bool> DeletePost(int id)
         {
-            var existingPost = await GetPostsById(id);
+            var existingPost = await GetPostById(id);
             existingPost.IsArchived = true;
             _context.Posts.Update(existingPost);
             var updatedPost = await _context.SaveChangesAsync();
