@@ -16,12 +16,14 @@ namespace Twitter.API.Services
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _config;
+        private readonly IPostService _postService;
 
-        public UserService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration config)
+        public UserService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration config, IPostService postService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _config = config;
+            _postService = postService;
         }
 
         public async Task<IdentityRole> CreateRole(string Name)
@@ -77,11 +79,12 @@ namespace Twitter.API.Services
                 }
 
                 var token = GenerateToken(authClaims);
-
+           
                 return new AuthResponse
                 {
                     Success = true,
-                    Token = new JwtSecurityTokenHandler().WriteToken(token)
+                    Token = new JwtSecurityTokenHandler().WriteToken(token),
+                    Posts = await _postService.UserNonArchivedPosts(user.Id)
                 };
             }
             else

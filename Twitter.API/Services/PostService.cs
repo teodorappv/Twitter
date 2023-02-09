@@ -107,5 +107,26 @@ namespace Twitter.API.Services
             }
             return true;
         }
+
+        public async Task<List<Post>> UserNonArchivedPosts (string userId)
+        {
+            var firstPost = await _context.Posts.Where(post => post.CreatedById.Equals(userId) && post.IsArchived == false).
+                OrderByDescending(post => post.Created).FirstOrDefaultAsync();
+
+            var thirdPost = await _context.Posts.Where(post => post.CreatedById.Equals(userId) && post.IsArchived == false).
+                OrderBy(post => post.Created).Skip(2).Take(1).FirstOrDefaultAsync();
+
+            var lastPost = await _context.Posts.Where(post => post.CreatedById.Equals(userId) && post.IsArchived == false).
+                OrderByDescending(post => post.Created).LastOrDefaultAsync();
+
+            List<Post> listOfPosts = new List<Post>
+            {
+                firstPost,
+                thirdPost,
+                lastPost
+            };
+
+            return listOfPosts;
+        }
     }
 }
