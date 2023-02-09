@@ -7,6 +7,7 @@ using Twitter.API.Exceptions;
 using Twitter.Core.Contracts;
 using Twitter.Core.Contracts.V1;
 using Twitter.Core.Domain.DTOs.Requests;
+using Twitter.Core.Domain.DTOs.Responses;
 using Twitter.Core.Domain.Entities;
 
 namespace Twitter.API.Controllers.V1
@@ -37,6 +38,31 @@ namespace Twitter.API.Controllers.V1
         }
 
         /// <summary>
+        /// Returns all posts with pagination.
+        /// </summary>
+        /// <returns>Returns all posts with pagination.</returns>
+        /// <response code = "200">Successfully returned all posts with pagination.</response>
+        [HttpGet(ApiRoutes.Post.ReadAll)]
+        [ProducesResponseType(typeof(PostResponse<Post>), 200)]
+        public async Task<IActionResult> ReadAll([FromQuery] PostParameters postParameters)
+        {
+            var posts = await _service.ReadAllPosts(postParameters);
+            return Ok(new PostResponse<Post>(posts));
+        }
+
+        /// <summary>
+        /// Returns a number of available posts.
+        /// </summary>
+        /// <returns>Returns a number of available posts.</returns>
+        /// <response code = "200">Successfully returned number of available posts.</response>
+        [HttpGet(ApiRoutes.Post.NumberOfAvailablePosts)]
+        [ProducesResponseType(typeof(int), 200)]
+        public async Task<ActionResult<int>> NumberOfAvailablePosts([FromQuery] int? categoryId)
+        {
+            return Ok(await _service.NumberOfAvailablePosts(categoryId));
+        }
+
+        /// <summary>
         /// Returns a post.
         /// </summary>
         /// <param name="id">if post doesn't exists, an exception will be thrown</param>
@@ -49,7 +75,7 @@ namespace Twitter.API.Controllers.V1
         [BusinessExceptionFilter(typeof(ValidationRequestException), HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetPostById(int id)
         {
-            return Ok(await _service.GetPostsById(id));
+            return Ok(await _service.GetPostById(id));
         }
 
         /// <summary>

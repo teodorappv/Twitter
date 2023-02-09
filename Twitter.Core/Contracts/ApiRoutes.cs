@@ -18,6 +18,8 @@
         public static class Post
         {
             public const string GetAll = Base + "/posts";
+            public const string ReadAll = Base + "/readposts";
+            public const string NumberOfAvailablePosts = Base + "/numberofavailableposts";
             public const string GetPost = Base + "/posts/{id}";
             public const string Create = Base + "/posts";
             public const string Update = Base + "/posts";
